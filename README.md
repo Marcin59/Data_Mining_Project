@@ -1,4 +1,4 @@
-# Data Maning Project1
+# Data Mining Project1
 ### Group: Masiso Enjoyers
 ### Members:
 - Marcin Kapiszewski (code) - 156048

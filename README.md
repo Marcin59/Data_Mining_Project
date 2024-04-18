@@ -7,3 +7,8 @@
 - Marcel Piotr Precelek Rojewski (szef szefów) - 156059
 
 Dataset: [House Pricing](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques)
+
+[Main](https://www.kaggle.com/code/marcinkapiszewski/house-prices-data-mining) - model with preproccesing 
+
+[Test](https://www.kaggle.com/code/marcinkapiszewski/house-prices-data-mining-without-preprocessing) - model without preproccesing, just imput missing value and encode categories with LabelEncoder
+

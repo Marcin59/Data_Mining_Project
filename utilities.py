@@ -52,7 +52,7 @@ def remove_low_correlation_to_target_columns(df: pd.DataFrame, target: np.ndarra
 
 def test_model(model, X_train, y_train, X_test, y_test):
     errors = []
-    for _ in range(50):
+    for _ in range(25):
         model.fit(X_train, y_train)
         prediction = model.predict(X_test)
         errors.append(mean_squared_error(y_test, prediction))
@@ -64,18 +64,27 @@ def compare_errors(errors):
     values = [k[1] for k in items]
     keys = [k[0] for k in items]
     fig = plt.figure(figsize =(10, 7))
-    plt.boxplot(values, labels=keys)
+    plt.violinplot(values)
+    plt.xticks(range(1, len(keys) + 1), keys)
     plt.show()
 
 class ColumnDropperTransformer():
-    def __init__(self, selected_columns):
-        self.selected_columns = selected_columns
+    def __init__(self, threshold = 0.9):
+        self.columns_to_remove = []
+        self.threshold = threshold
 
     def transform(self,X,y=None):
-        return X[self.selected_columns]
+        return X.drop(columns = self.columns_to_remove)
 
     def fit(self, X: pd.DataFrame, y=None):
+        num_of_nulls = X.isna().sum()
+        percentage_of_nulls = num_of_nulls/X.shape[0]
+        self.columns_to_remove = percentage_of_nulls[percentage_of_nulls > self.threshold].index
         return self 
+    
+    def fit_transform(self, X, y=None):
+        self.fit(X)
+        return self.transform(X)
 
 class CategoricalEncoder(BaseEstimator, TransformerMixin):
     def __init__(self):
@@ -109,7 +118,7 @@ class OutlierTransformer(BaseEstimator, TransformerMixin):
             X.loc[lower_mask, column] = self.lower_bound[column]
             X.loc[upper_mask, column] = self.upper_bound[column]
         return X
-
+    
     def fit_transform(self, X, y=None):
         self.fit(X)
         return self.transform(X)

@@ -6,6 +6,7 @@ from sklearn.feature_selection import VarianceThreshold
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
+from scipy.stats import skew
 
 def load_data():
     train = pd.read_csv("./data/train.csv")
@@ -52,7 +53,7 @@ def remove_low_correlation_to_target_columns(df: pd.DataFrame, target: np.ndarra
 
 def test_model(model, X_train, y_train, X_test, y_test):
     errors = []
-    for _ in range(25):
+    for _ in range(50):
         model.fit(X_train, y_train)
         prediction = model.predict(X_test)
         errors.append(mean_squared_error(y_test, prediction))
@@ -70,7 +71,7 @@ def compare_errors(errors):
 
 class ColumnDropperTransformer():
     def __init__(self, threshold = 0.9):
-        self.columns_to_remove = []
+        self.columns_to_remove = set(["Id", 'GarageArea', "GarageYrBlt", 'TotRmsAbvGrd', "1stFlrSF"])
         self.threshold = threshold
 
     def transform(self,X,y=None):
@@ -79,7 +80,7 @@ class ColumnDropperTransformer():
     def fit(self, X: pd.DataFrame, y=None):
         num_of_nulls = X.isna().sum()
         percentage_of_nulls = num_of_nulls/X.shape[0]
-        self.columns_to_remove = percentage_of_nulls[percentage_of_nulls > self.threshold].index
+        self.columns_to_remove.update(percentage_of_nulls[percentage_of_nulls > self.threshold].index)
         return self 
     
     def fit_transform(self, X, y=None):
@@ -122,3 +123,18 @@ class OutlierTransformer(BaseEstimator, TransformerMixin):
     def fit_transform(self, X, y=None):
         self.fit(X)
         return self.transform(X)
+
+class SkewnessTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self, threshold=0.75):
+        self.threshold = threshold
+        self.columns_to_transform = None
+
+    def fit(self, X, y=None):
+        skewness = X.apply(lambda x: skew(x.dropna()))
+        self.columns_to_transform = skewness[skewness > self.threshold].index
+        return self
+
+    def transform(self, X):
+        for col in self.columns_to_transform:
+            X[col] = np.log1p(X[col])
+        return X

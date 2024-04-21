@@ -4,6 +4,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
 
 def load_data():
     train = pd.read_csv("./data/train.csv")
@@ -48,6 +50,23 @@ def remove_low_correlation_to_target_columns(df: pd.DataFrame, target: np.ndarra
     columns_to_remove = df.columns[list(column_indexes_to_remove)]
     return df.drop(columns=columns_to_remove), columns_to_remove
 
+def test_model(model, X_train, y_train, X_test, y_test):
+    errors = []
+    for _ in range(50):
+        model.fit(X_train, y_train)
+        prediction = model.predict(X_test)
+        errors.append(mean_squared_error(y_test, prediction))
+    return errors
+
+def compare_errors(errors):
+    items = list(errors.items())
+    items.sort(key=lambda x: x[0])
+    values = [k[1] for k in items]
+    keys = [k[0] for k in items]
+    fig = plt.figure(figsize =(10, 7))
+    plt.boxplot(values, labels=keys)
+    plt.show()
+
 class ColumnDropperTransformer():
     def __init__(self, selected_columns):
         self.selected_columns = selected_columns
@@ -70,3 +89,27 @@ class CategoricalEncoder(BaseEstimator, TransformerMixin):
         for col in X_copy.columns:
             X_copy[col] = LabelEncoder().fit_transform(X_copy[col])
         return X_copy
+
+class OutlierTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self, q_lower=0.001, q_upper=0.999):
+        self.q_lower = q_lower
+        self.q_upper = q_upper
+        self.lower_bound = None
+        self.upper_bound = None
+
+    def fit(self, X, y=None):
+        self.lower_bound = X.quantile(self.q_lower)
+        self.upper_bound = X.quantile(self.q_upper)
+        return self
+
+    def transform(self, X: pd.DataFrame):
+        for column in X.columns:
+            lower_mask = X.loc[:, column] < self.lower_bound[column]
+            upper_mask = X.loc[:, column] > self.upper_bound[column]
+            X.loc[lower_mask, column] = self.lower_bound[column]
+            X.loc[upper_mask, column] = self.upper_bound[column]
+        return X
+
+    def fit_transform(self, X, y=None):
+        self.fit(X)
+        return self.transform(X)

@@ -10,6 +10,7 @@ Dataset: [House Pricing](https://www.kaggle.com/competitions/house-prices-advanc
 
 [Main](https://www.kaggle.com/code/marcinkapiszewski/house-prices-data-mining) - model with preproccesing 
 
-[house-prices[Marcel's Version][From the Vault]](https://www.kaggle.com/code/marcelrojewski/house-prices-marcel-s-version-from-the-vault)    
+[House-Prices[Marcel's Version][From the Vault]](https://www.kaggle.com/code/marcelrojewski/house-prices-marcel-s-version-from-the-vault) 
+  
 [Test](https://www.kaggle.com/code/marcinkapiszewski/house-prices-data-mining-without-preprocessing) - model without preproccesing, just imput missing value and encode categories with LabelEncoder
 

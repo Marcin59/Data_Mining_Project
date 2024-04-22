@@ -120,7 +120,11 @@ def test_model(model, X_train, y_train, X_test, y_test):
     errors (list): List of mean squared errors for each iteration.
     """
     errors = []
-    for _ in range(50):
+    iterations = 20
+    seed_start = 2922
+    seeds = np.linspace(seed_start, seed_start+iterations-1, dtype=np.int32)
+    for i in range(iterations):
+        np.random.seed(seeds[i])
         model.fit(X_train, y_train)
         prediction = model.predict(X_test)
         errors.append(mean_squared_error(y_test, prediction))

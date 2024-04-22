@@ -14,3 +14,4 @@ Dataset: [House Pricing](https://www.kaggle.com/competitions/house-prices-advanc
   
 [Test](https://www.kaggle.com/code/marcinkapiszewski/house-prices-data-mining-without-preprocessing) - model without preproccesing, just imput missing value and encode categories with LabelEncoder
 
+[Report](https://www.overleaf.com/project/6615b477d5751fec42fe6002)

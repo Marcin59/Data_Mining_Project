@@ -2,7 +2,7 @@
 ### Group: Masiso Enjoyers
 ### Members:
 - Marcin Kapiszewski (code) - 156048
-- Maciej Janicki (presentation) - ????
+- Maciej Janicki (presentation) - 156073
 - Adam Tomys (report) - ??????
 - Marcel Piotr Precelek Rojewski (szef szefów) - 156059
 

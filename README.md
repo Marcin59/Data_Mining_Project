@@ -9,7 +9,7 @@ The project is a collaboration between the Masiso Enjoyers group, consisting of 
 
 - Marcin Kapiszewski (code) - 156048
 - Maciej Janicki (presentation) - 156073
-- Adam Tomys (report) - ??????
+- Adam Tomys (report) - 156057
 - Marcel Piotr Precelek Rojewski (szef szefów) - 156059
 
 ## Dataset

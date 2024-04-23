@@ -24,4 +24,4 @@ The project report can be found on [Overleaf](https://www.overleaf.com/project/6
 
 - [Marcin's Kaggle Notebook](https://www.kaggle.com/code/marcinkapiszewski/house-prices-data-mining) - This notebook was used as reference regarding the quality of preprocessing
 - [Test Kaggle Notebook](https://www.kaggle.com/code/marcinkapiszewski/house-prices-data-mining-without-preprocessing) - This notebook contains the code for testing the model without preprocessing, only imputing missing values and encoding categories with LabelEncoder.
-- [Marcel's Kaggle Notebook](https://www.kaggle.com/code/marcelrojewski/house-prices-marcel-s-version-from-the-vault) - Marcel's version of the project code.
+- [Marcel's Kaggle Notebook](https://www.kaggle.com/code/marcelrojewski/house-prices-marcel-s-version-from-the-vault) - Marcel's attempt at the project code.

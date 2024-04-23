@@ -19,7 +19,7 @@ The dataset used for this project is the [House Pricing dataset](https://www.kag
 ## Project Links
 
 - [Main Kaggle Notebook](https://www.kaggle.com/code/marcinkapiszewski/house-prices-data-mining) - This notebook contains the main code for the project, including preprocessing steps.
-- [Marcel's Kaggle Notebook](https://www.kaggle.com/code/marcelrojewski/house-prices-marcel-s-version-from-the-vault) - Marcel's version of the project code, available from the Kaggle vault.
+- [Marcel's Kaggle Notebook](https://www.kaggle.com/code/marcelrojewski/house-prices-marcel-s-version-from-the-vault) - Marcel's version of the project code.
 - [Test Kaggle Notebook](https://www.kaggle.com/code/marcinkapiszewski/house-prices-data-mining-without-preprocessing) - This notebook contains the code for testing the model without preprocessing, only imputing missing values and encoding categories with LabelEncoder.
 
 ## Report

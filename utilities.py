@@ -105,7 +105,7 @@ def remove_low_correlation_to_target_columns(df: pd.DataFrame, target: np.ndarra
     columns_to_remove = df.columns[list(column_indexes_to_remove)]
     return df.drop(columns=columns_to_remove), columns_to_remove
 
-def test_model(model, X_train, y_train, X_test, y_test):
+def test_model(model, X_train, y_train, X_test, y_test, iterations = 10):
     """
     Test a model by fitting it multiple times and calculating the mean squared error.
 
@@ -120,7 +120,6 @@ def test_model(model, X_train, y_train, X_test, y_test):
     errors (list): List of mean squared errors for each iteration.
     """
     errors = []
-    iterations = 20
     seed_start = 2922
     seeds = np.linspace(seed_start, seed_start+iterations-1, dtype=np.int32)
     for i in range(iterations):
@@ -160,8 +159,8 @@ class ColumnDropperTransformer():
     columns_to_remove (set): Set of column names to be removed.
     threshold (float): Threshold for dropping columns.
     """
-    def __init__(self, threshold = 0.9):
-        self.columns_to_remove = set(["Id", 'GarageArea', "GarageYrBlt", 'TotRmsAbvGrd', "1stFlrSF"])
+    def __init__(self, threshold = 0.9, to_remove=["Id", 'GarageArea', "GarageYrBlt", 'TotRmsAbvGrd', "1stFlrSF"]):
+        self.columns_to_remove = set(to_remove)
         self.threshold = threshold
 
     def transform(self,X,y=None):
@@ -357,3 +356,49 @@ class SkewnessTransformer(BaseEstimator, TransformerMixin):
         for col in self.columns_to_transform:
             X[col] = np.log1p(X[col])
         return X
+    
+class NumericalEncoder():
+    """
+    Encodes categorical variables into numerical values.
+
+    Parameters:
+    - columns (list): List of column names to encode.
+    - categories (list): List of categories to map to numerical values 
+        in ascending order based on quality (first value is the worst category the last is the best).
+    - default_value (int, optional): Default value to use for categories not present in the mapping. Defaults to 0.
+    """
+
+    def __init__(self, columns, categories, default_value=0):
+        self.columns = columns
+        self.default_value = default_value
+        self.mapper = {}
+        for i, cat in enumerate(categories):
+            self.mapper[cat] = i
+    
+    def fit(self, X, y=None):
+        """
+        Fit the encoder to the data.
+
+        Parameters:
+        - X (pandas.DataFrame): Input data to fit the encoder on.
+        - y (pandas.Series, optional): Target variable. Ignored in this implementation.
+
+        Returns:
+        - self: Returns an instance of the encoder.
+        """
+        return self
+    
+    def transform(self, X):
+        """
+        Transform the input data by encoding the specified columns.
+
+        Parameters:
+        - X (pandas.DataFrame): Input data to transform.
+
+        Returns:
+        - X_copy (pandas.DataFrame): Transformed data with encoded columns.
+        """
+        X_copy = X.copy()
+        for col in self.columns:
+            X_copy[col] = X_copy[col].apply(lambda x: self.mapper.get(x, self.default_value))
+        return X_copy
